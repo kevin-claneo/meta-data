@@ -4,6 +4,30 @@ import gspread
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 
+
+
+def setup_streamlit():
+    """
+    Configures Streamlit's page settings and displays the app title and markdown information.
+    Sets the page layout, title, and markdown content with links and app description.
+    """
+    st.set_page_config(
+    page_title="Topical Authority with N-grams - Kevin (Claneo)",
+    page_icon=":weight_lifter:",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.linkedin.com/in/kirchhoff-kevin/',
+        'About': "This is an app for checking your topical authority! Adapted from Lee Foot's GSC-connector check out his apps: https://leefoot.co.uk"
+    }
+    )
+    st.image("https://www.claneo.com/wp-content/uploads/Element-4.svg", width=600, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    st.caption(":point_right: Join Claneo and support exciting clients as part of the Consulting team") 
+    st.caption(':bulb: Make sure to mention that *Kevin* brought this job posting to your attention')
+    st.link_button("Learn More", "https://www.claneo.com/en/career/#:~:text=Consulting")
+    st.title("Check the topical authority of a GSC property")
+    st.divider()
+
 # -------------
 # Google Authentication Functions
 # -------------
