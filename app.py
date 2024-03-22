@@ -14,7 +14,7 @@ def setup_streamlit():
     """
     st.set_page_config(
         page_title="Google Sheets Access with Streamlit",
-        page_icon=":weight_lifter:",
+        page_icon="🤖",
         layout="wide",
         initial_sidebar_state="expanded",
         menu_items={
