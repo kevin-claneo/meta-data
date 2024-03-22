@@ -1,38 +1,56 @@
 import streamlit as st
 import pandas as pd
 import gspread
-from oauth2client.client import OAuth2WebServerFlow
+from google_auth_oauthlib.flow import Flow
+from googleapiclient.discovery import build
 
-# Function to load the OAuth2 client configuration from Streamlit secrets
-def load_oauth2_config():
-    return {
-        "client_id": st.secrets["installed"]["client_id"],
-        "client_secret": st.secrets["installed"]["client_secret"],
-        "redirect_uris": st.secrets["installed"]["redirect_uris"],
+# -------------
+# Google Authentication Functions
+# -------------
+
+def load_config():
+    """
+    Loads the Google API client configuration from Streamlit secrets.
+    Returns a dictionary with the client configuration for OAuth.
+    """
+    client_config = {
+        "installed": {
+            "client_id": str(st.secrets["installed"]["client_id"]),
+            "client_secret": str(st.secrets["installed"]["client_secret"]),
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://accounts.google.com/o/oauth2/token",
+            "redirect_uris": (
+                ["http://localhost:8501"]
+                if IS_LOCAL
+                else [str(st.secrets["installed"]["redirect_uris"][0])]
+            ),
+        }
     }
+    return client_config
 
-# Function to start the Google authentication process
-def google_auth(client_config):
-    flow = OAuth2WebServerFlow(
-        client_id=client_config["client_id"],
-        client_secret=client_config["client_secret"],
-        scope=['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive'],
-        redirect_uri=client_config["redirect_uris"][0],
+
+def init_oauth_flow(client_config):
+    """
+    Initialises the OAuth flow for Google API authentication using the client configuration.
+    Sets the necessary scopes and returns the configured Flow object.
+    """
+    scopes = ["https://www.googleapis.com/auth/webmasters"]
+    return Flow.from_client_config(
+        client_config,
+        scopes=scopes,
+        redirect_uri=client_config["installed"]["redirect_uris"][0],
     )
-    auth_url = flow.step1_get_authorize_url()
+
+
+def google_auth(client_config):
+    """
+    Starts the Google authentication process using OAuth.
+    Generates and returns the OAuth flow and the authentication URL.
+    """
+    flow = init_oauth_flow(client_config)
+    auth_url, _ = flow.authorization_url(prompt="consent")
     return flow, auth_url
 
-# Function to authenticate with the Google Sheets API
-def auth_sheets(flow):
-    # Assuming you have a way to get the authorization code from the user
-    # This could be through a callback URL or manual input
-    auth_code = st.text_input("Enter the authorization code:")
-    if auth_code:
-        credentials = flow.step2_exchange(auth_code)
-        return credentials
-    else:
-        st.warning("Please enter the authorization code.")
-        return None
 
 # Function to access the Google Sheet
 def access_google_sheet(credentials, spreadsheet_name):
