@@ -65,24 +65,6 @@ def access_google_sheet(credentials, spreadsheet_name):
     except Exception as e:
         st.error(f'An error occurred: {e}')
 
-# Load the OAuth2 configuration
-client_config = load_oauth2_config()
-
-# Start the Google authentication process
-flow, auth_url = google_auth(client_config)
-st.write(f"Please go to the following URL and enter the authorization code: {auth_url}")
-
-# Authenticate with the Google Sheets API
-credentials = auth_sheets(flow)
-
-# Prompt the user for the Google Sheets name
-spreadsheet_name = st.text_input("Enter the Google Sheets name:")
-
-# Access the Google Sheet
-if credentials and spreadsheet_name:
-    access_google_sheet(credentials, spreadsheet_name)
-else:
-    st.warning("Please complete the authentication and provide the Google Sheets name.")
 
 def show_google_sign_in(auth_url):
     """
