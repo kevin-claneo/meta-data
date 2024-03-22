@@ -4,7 +4,9 @@ import gspread
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 
-
+# Configuration: Set to True if running locally, False if running on Streamlit Cloud
+# IS_LOCAL = True
+IS_LOCAL = False
 
 def setup_streamlit():
     """
