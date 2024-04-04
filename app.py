@@ -180,9 +180,14 @@ def main():
     # Text area for keywords
     keywords_text = st.text_area("Enter Keywords 🔑 (separated by commas or line breaks):")
 
-    # Convert text areas to DataFrames and reset indices
-    urls_df = text_to_df(urls_text, 'url').reset_index(drop=True)
-    keywords_df = text_to_df(keywords_text, 'keyword').reset_index(drop=True)
+    # Convert text areas to DataFrames
+    urls_df = text_to_df(urls_text, 'url')
+    keywords_df = text_to_df(keywords_text, 'keyword')
+    
+    # Check if the number of URLs matches the number of keywords
+    if len(urls_df) != len(keywords_df):
+        st.error("The number of URLs does not match the number of keywords. Please ensure that each URL has a corresponding keyword.")
+        return
     
     # Merge the DataFrames on the reset indices
     df = pd.merge(urls_df, keywords_df, left_index=True, right_index=True)
