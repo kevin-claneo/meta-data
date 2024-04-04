@@ -93,7 +93,7 @@ def handle_api_keys():
         client = Groq(api_key=st.secrets["groq"]["api_key"])
     elif model in OPENAI_MODELS:
         client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key:', "https://platform.openai.com/api-keys"))
-    return client
+    return client, model
 
 # Function to download the DataFrame as a CSV
 def download_dataframe(df):
