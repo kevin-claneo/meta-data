@@ -55,8 +55,7 @@ def setup_streamlit():
 # -------------
 
 def text_to_df(text, column_name):
-    items = text.split(',') + text.split('\n')
-    items = [item.strip() for item in items if item.strip()]
+    items = [item.strip() for item in re.split(r',|\n', text) if item.strip()]
     df = pd.DataFrame(items, columns=[column_name])
     return df
 
