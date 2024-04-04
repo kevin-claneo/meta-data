@@ -5,7 +5,9 @@ from groq import Groq
 import re
 import time
 import advertools as adv
-
+from streamlit.report_thread import get_report_ctx
+from streamlit.hashing import _CodeHasher
+from streamlit.server.Server import Server
 
 # Constants
 GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
@@ -13,6 +15,34 @@ OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
 MODELS = GROQ_MODELS + OPENAI_MODELS
 LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
 
+
+# -------------
+# Streamlit App Configuration
+# -------------
+
+def get_session():
+    session = get_report_ctx().session
+    if session is None:
+        raise RuntimeError("Oh noes. Couldn't get your Streamlit Session object.")
+    return session
+
+def get_state(**kwargs):
+    """Gets a SessionState object for the current session."""
+    session = get_session()
+    if not hasattr(session, "_custom_session_state"):
+        session._custom_session_state = _SessionState(**kwargs)
+    return session._custom_session_state
+
+class _SessionState:
+    def __init__(self, **kwargs):
+        """A new SessionState object.
+        Parameters
+        ----------
+        **kwargs : any
+            Default values for the session state.
+        """
+        for key, val in kwargs.items():
+            setattr(self, key, val)
 
 def setup_streamlit():
     """
@@ -36,45 +66,11 @@ def setup_streamlit():
     st.title("Access Google Sheets Data")
     st.divider()
 
-import streamlit as st
-import pandas as pd
-from openai import OpenAI
-from groq import Groq
-import re
-import time
-import advertools as adv
 
+# -------------
+# Functions
+# -------------
 
-# Constants
-GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
-OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
-MODELS = GROQ_MODELS + OPENAI_MODELS
-LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
-
-
-def setup_streamlit():
-    """
-    Configures Streamlit's page settings and displays the app title and markdown information.
-    Sets the page layout, title, and markdown content with links and app description.
-    """
-    st.set_page_config(
-        page_title="Google Sheets Access with Streamlit",
-        page_icon="🤖",
-        layout="wide",
-        initial_sidebar_state="expanded",
-        menu_items={
-            'Get Help': 'https://www.linkedin.com/in/kirchhoff-kevin/',
-            'About': "This is an app for accessing Google Sheets data."
-        }
-    )
-    st.image("https://www.claneo.com/wp-content/uploads/Element-4.svg", width=600, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
-    st.caption(":point_right: Join Claneo and support exciting clients as part of the Consulting team") 
-    st.caption(':bulb: Make sure to mention that *Kevin* brought this job posting to your attention')
-    st.link_button("Learn More", "https://www.claneo.com/en/career/#:~:text=Consulting")
-    st.title("Access Google Sheets Data")
-    st.divider()
-
-# Function to convert text area input into a DataFrame
 def text_to_df(text, column_name):
     items = text.split(',') + text.split('\n')
     items = [item.strip() for item in items if item.strip()]
@@ -212,6 +208,9 @@ def analyze_urls(dataframe, client, language):
 # Main function to run the Streamlit app
 def main():
     setup_streamlit()
+    # Initialize session state
+    state = get_state(confirmed_preview=False)
+
     # Text area for URLs
     urls_text = st.text_area("Enter URLs (separated by commas or line breaks):")
     # Text area for keywords
@@ -230,6 +229,9 @@ def main():
 
         # Confirm the preview
         if st.button("Confirm Preview"):
+            state.confirmed_preview = True
+
+        if state.confirmed_preview:
             # Handle API keys and model selection
             client, model = handle_api_keys()
 
