@@ -47,8 +47,8 @@ def setup_streamlit():
     st.caption(':bulb: Make sure to mention that *Kevin* brought this job posting to your attention')
     st.link_button("Learn More", "https://www.claneo.com/en/career/#:~:text=Consulting")
     st.title("🤖 Optimize Your SEO Meta Data with AI")
-    st.write("This tool creates a new Title tag, Meta Description and H1 based on your existing ones. If you don't have any yet, the tool come up with it's own.)
-    st.write("You only have to enter URLs and the matching keywords.)
+    st.write("This tool creates a new Title tag, Meta Description and H1 based on your existing ones. If you don't have any yet, the tool come up with it's own.")
+    st.write("You only have to enter URLs and the matching keywords.")
     st.divider()
 
 
