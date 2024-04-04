@@ -205,7 +205,7 @@ def main():
             client, model = handle_api_keys()
 
             # Choose a language for the Meta Data
-            language = st.selectbox("Choose a language :united_nations: for the Meta Data:", LANGUAGES)
+            language = st.selectbox("Choose a language 🇺🇳 for the Meta Data:", LANGUAGES)
 
             # Generate Meta Data
             if st.button("Generate Meta Data"):
