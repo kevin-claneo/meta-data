@@ -48,9 +48,9 @@ def show_dataframe(df):
 # Function to handle the model selection and API key input
 def handle_api_keys():
     model = st.selectbox("Choose a model:", MODELS)
-    if model in groq_models:
+    if model in GROQ_MODELS:
         client = Groq(api_key=st.secrets["groq"]["api_key"])
-    elif model in openai_models:
+    elif model in OPENAI_MODELS:
         client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key', "https://platform.openai.com/api-keys"))
     return client
 
