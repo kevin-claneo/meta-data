@@ -1,11 +1,16 @@
 import streamlit as st
 import pandas as pd
-import gspread
-from google_auth_oauthlib.flow import Flow
-from googleapiclient.discovery import build
 
-# Configuration: Set to True if running locally, False if running on Streamlit Cloud
-IS_LOCAL = False
+import streamlit as st
+import pandas as pd
+from openai import OpenAI
+from groq import Groq
+
+# Constants
+GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
+OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
+MODELS = GROQ_MODELS + OPENAI_MODELS
+
 
 def setup_streamlit():
     """
@@ -28,96 +33,60 @@ def setup_streamlit():
     st.link_button("Learn More", "https://www.claneo.com/en/career/#:~:text=Consulting")
     st.title("Access Google Sheets Data")
     st.divider()
+# Function to convert text area input into a DataFrame
+def text_to_df(text):
+    items = text.split(',') + text.split('\n')
+    items = [item.strip() for item in items if item.strip()]
+    df = pd.DataFrame(items, columns=['url'])
+    return df
 
-def load_config():
-    """
-    Loads the Google API client configuration from Streamlit secrets.
-    Returns a dictionary with the client configuration for OAuth.
-    """
-    client_config = {
-        "installed": {
-            "client_id": str(st.secrets["installed"]["client_id"]),
-            "client_secret": str(st.secrets["installed"]["client_secret"]),
-            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-            "token_uri": "https://accounts.google.com/o/oauth2/token",
-            "redirect_uris": (
-                ["http://localhost:8501"]
-                if IS_LOCAL
-                else [str(st.secrets["installed"]["redirect_uris"][0])]
-            ),
-        }
-    }
-    return client_config
+# Function to show the DataFrame in an expandable section
+def show_dataframe(df):
+    with st.expander("Preview the First 100 Rows"):
+        st.dataframe(df.head(100))
 
-def init_oauth_flow(client_config):
-    """
-    Initialises the OAuth flow for Google API authentication using the client configuration.
-    Sets the necessary scopes and returns the configured Flow object.
-    """
-    scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-    return Flow.from_client_config(
-        client_config,
-        scopes=scopes,
-        redirect_uri=client_config["installed"]["redirect_uris"][0],
+# Function to handle the model selection and API key input
+def handle_api_keys():
+    model = st.selectbox("Choose a model:", models)
+    if model in groq_models:
+        client = Groq(api_key=st.secrets["groq"]["api_key"])
+    elif model in openai_models:
+        client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key', "https://platform.openai.com/api-keys"))
+    return client
+
+# Function to download the DataFrame as a CSV
+def download_dataframe(df):
+    csv = df.to_csv(index=False)
+    st.download_button(
+        label="Download DataFrame as CSV",
+        data=csv,
+        file_name='dataframe.csv',
+        mime='text/csv',
     )
 
-def google_auth(client_config):
-    """
-    Starts the Google authentication process using OAuth.
-    Generates and returns the OAuth flow and the authentication URL.
-    """
-    flow = init_oauth_flow(client_config)
-    auth_url, _ = flow.authorization_url(prompt="consent")
-    return flow, auth_url
-
-def show_google_sign_in(auth_url):
-    """
-    Displays the Google sign-in button and authentication URL in the Streamlit sidebar.
-    """
-    with st.sidebar:
-        if st.button("Sign in with Google"):
-            # Open the authentication URL
-            st.write('Please click the link below to sign in:')
-            st.markdown(f'[Google Sign-In]({auth_url})', unsafe_allow_html=True)
-
-def access_google_sheet(credentials, spreadsheet_name):
-    """
-    Accesses the specified Google Sheet and displays its content.
-    """
-    gc = gspread.authorize(credentials)
-    try:
-        spreadsheet = gc.open(spreadsheet_name)
-        # Assuming you want to access the first sheet
-        worksheet = spreadsheet.sheet1
-        values = worksheet.get_all_values()
-        df = pd.DataFrame(values)
-        st.dataframe(df)
-    except Exception as e:
-        st.error(f'An error occurred: {e}')
-
+# Main function to run the Streamlit app
 def main():
-    """
-    The main function for the Streamlit application.
-    Handles the app setup, authentication, and Google Sheets data access.
-    """
-    setup_streamlit()
-    client_config = load_config()
-    st.session_state.auth_flow, st.session_state.auth_url = google_auth(client_config)
+    # Text area for URLs
+    urls_text = st.text_area("Enter URLs (separated by commas or line breaks):")
+    # Text area for keywords
+    keywords_text = st.text_area("Enter Keywords (separated by commas or line breaks):")
 
-    query_params = st.experimental_get_query_params()
-    auth_code = query_params.get("code", [None])[0]
+    # Convert text areas to DataFrames
+    urls_df = text_to_df(urls_text)
+    keywords_df = text_to_df(keywords_text)
 
-    if auth_code and not st.session_state.get('credentials'):
-        st.session_state.auth_flow.fetch_token(code=auth_code)
-        st.session_state.credentials = st.session_state.auth_flow.credentials
+    # Combine the DataFrames
+    df = pd.merge(urls_df, keywords_df, left_index=True, right_index=True)
 
-    if not st.session_state.get('credentials'):
-        show_google_sign_in(st.session_state.auth_url)
-    else:
-        # Access Google Sheets data
-        spreadsheet_name = st.text_input("Enter the Google Sheets name:")
-        if spreadsheet_name:
-            access_google_sheet(st.session_state.credentials, spreadsheet_name)
+    # Display the DataFrame
+    show_dataframe(df)
 
+    # Handle API keys and model selection
+    client = handle_api_keys()
+
+    # Download DataFrame as CSV
+    download_dataframe(df)
+
+# Run the main function
 if __name__ == "__main__":
     main()
