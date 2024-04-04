@@ -33,7 +33,7 @@ def setup_streamlit():
     Sets the page layout, title, and markdown content with links and app description.
     """
     st.set_page_config(
-        page_title="Optimize Your Meta Data with AI",
+        page_title="Meta Data Optimizer",
         page_icon="🤖",
         layout="wide",
         initial_sidebar_state="expanded",
@@ -46,7 +46,7 @@ def setup_streamlit():
     st.caption(":point_right: Join Claneo and support exciting clients as part of the Consulting team") 
     st.caption(':bulb: Make sure to mention that *Kevin* brought this job posting to your attention')
     st.link_button("Learn More", "https://www.claneo.com/en/career/#:~:text=Consulting")
-    st.title("Access Google Sheets Data")
+    st.title("🤖 Optimize Your SEO Meta Data with AI")
     st.divider()
 
 
