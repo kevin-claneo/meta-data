@@ -189,8 +189,8 @@ def main():
 
     if not df.empty:
         # Display the DataFrame
-        show_dataframe(df)
-
+        st.dataframe(df.head(100))
+        
         # Confirm the preview
         if st.button("Confirm Preview"):
             st.session_state.confirmed_preview = True
