@@ -116,7 +116,7 @@ def clean_up_string(s):
     elements = [elem.strip() for elem in cleaned.split('\n') if elem.strip()]
     return ' '.join(elements) # Joining the elements back into a single string
 
-def analyze_urls(dataframe, client, language):
+def analyze_urls(dataframe, client, model, language):
     # Crawl URLs
     open('crawl_file.jl', 'w').close()
     adv.crawl(dataframe['url'], 'crawl_file.jl', follow_links=False)
