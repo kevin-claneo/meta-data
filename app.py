@@ -209,11 +209,9 @@ def main():
         # Display the DataFrame
         show_dataframe(df)
 
-        button_visible = True
         # Confirm the preview
-        if st.button("Confirm Preview", visible=button_visible):
+        if st.button("Confirm Preview"):
             st.session_state.confirmed_preview = True
-            button_visible = False
 
         if st.session_state.confirmed_preview:
             # Handle API keys and model selection
