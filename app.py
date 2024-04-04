@@ -189,6 +189,7 @@ def main():
 
     if not df.empty:
         # Display the DataFrame
+        st.write('Preview of the first 100 rows of your data, please make sure that it matches as intended.')
         st.dataframe(df.head(100))
         
         # Confirm the preview
