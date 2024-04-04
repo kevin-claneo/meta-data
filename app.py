@@ -36,6 +36,44 @@ def setup_streamlit():
     st.title("Access Google Sheets Data")
     st.divider()
 
+import streamlit as st
+import pandas as pd
+from openai import OpenAI
+from groq import Groq
+import re
+import time
+import advertools as adv
+
+
+# Constants
+GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
+OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
+MODELS = GROQ_MODELS + OPENAI_MODELS
+LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
+
+
+def setup_streamlit():
+    """
+    Configures Streamlit's page settings and displays the app title and markdown information.
+    Sets the page layout, title, and markdown content with links and app description.
+    """
+    st.set_page_config(
+        page_title="Google Sheets Access with Streamlit",
+        page_icon="🤖",
+        layout="wide",
+        initial_sidebar_state="expanded",
+        menu_items={
+            'Get Help': 'https://www.linkedin.com/in/kirchhoff-kevin/',
+            'About': "This is an app for accessing Google Sheets data."
+        }
+    )
+    st.image("https://www.claneo.com/wp-content/uploads/Element-4.svg", width=600, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    st.caption(":point_right: Join Claneo and support exciting clients as part of the Consulting team") 
+    st.caption(':bulb: Make sure to mention that *Kevin* brought this job posting to your attention')
+    st.link_button("Learn More", "https://www.claneo.com/en/career/#:~:text=Consulting")
+    st.title("Access Google Sheets Data")
+    st.divider()
+
 # Function to convert text area input into a DataFrame
 def text_to_df(text):
     items = text.split(',') + text.split('\n')
@@ -182,10 +220,11 @@ def main():
     # Convert text areas to DataFrames
     urls_df = text_to_df(urls_text)
     keywords_df = text_to_df(keywords_text)
-
+    
     # Combine the DataFrames
     df = pd.merge(urls_df, keywords_df, left_index=True, right_index=True)
 
+    if df not None:
     # Display the DataFrame
     show_dataframe(df)
 
