@@ -159,7 +159,7 @@ def analyze_urls(dataframe, client, language):
     return pd.DataFrame(results)
 
 # Function to analyze URLs and generate new content
-def analyze_urls(dataframe, client, language):
+def analyze_urls(dataframe, client, model, language):
     results = []
 
     # Iterate over each row in the DataFrame
@@ -209,9 +209,11 @@ def main():
         # Display the DataFrame
         show_dataframe(df)
 
+        button_visible = True
         # Confirm the preview
-        if st.button("Confirm Preview"):
+        if st.button("Confirm Preview", visible=button_visible):
             st.session_state.confirmed_preview = True
+            button_visible = False
 
         if st.session_state.confirmed_preview:
             # Handle API keys and model selection
