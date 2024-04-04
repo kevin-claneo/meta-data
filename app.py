@@ -5,9 +5,7 @@ from groq import Groq
 import re
 import time
 import advertools as adv
-from streamlit.report_thread import get_report_ctx
-from streamlit.hashing import _CodeHasher
-from streamlit.server.Server import Server
+
 
 # Constants
 GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
@@ -20,29 +18,14 @@ LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Poli
 # Streamlit App Configuration
 # -------------
 
-def get_session():
-    session = get_report_ctx().session
-    if session is None:
-        raise RuntimeError("Oh noes. Couldn't get your Streamlit Session object.")
-    return session
 
-def get_state(**kwargs):
-    """Gets a SessionState object for the current session."""
-    session = get_session()
-    if not hasattr(session, "_custom_session_state"):
-        session._custom_session_state = _SessionState(**kwargs)
-    return session._custom_session_state
+def init_session_state():
+    """
+    Initializes or updates the Streamlit session state variables.
+    """
+    if 'confirmed_preview' not in st.session_state:
+        st.session_state.confirmed_preview = False
 
-class _SessionState:
-    def __init__(self, **kwargs):
-        """A new SessionState object.
-        Parameters
-        ----------
-        **kwargs : any
-            Default values for the session state.
-        """
-        for key, val in kwargs.items():
-            setattr(self, key, val)
 
 def setup_streamlit():
     """
@@ -208,8 +191,7 @@ def analyze_urls(dataframe, client, language):
 # Main function to run the Streamlit app
 def main():
     setup_streamlit()
-    # Initialize session state
-    state = get_state(confirmed_preview=False)
+    init_session_state() # Initialize session state
 
     # Text area for URLs
     urls_text = st.text_area("Enter URLs (separated by commas or line breaks):")
@@ -229,9 +211,9 @@ def main():
 
         # Confirm the preview
         if st.button("Confirm Preview"):
-            state.confirmed_preview = True
+            st.session_state.confirmed_preview = True
 
-        if state.confirmed_preview:
+        if st.session_state.confirmed_preview:
             # Handle API keys and model selection
             client, model = handle_api_keys()
 
