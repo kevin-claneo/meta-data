@@ -247,7 +247,7 @@ def main():
                 # Download DataFrame as CSV
                 download_dataframe(new_df)
     else:
-        st.write("It looks like your text_input is empty, please fill in both fidlds")
+        st.write("It looks like your text_input is empty, please fill in both fields")
 
 # Run the main function
 if __name__ == "__main__":
