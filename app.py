@@ -66,6 +66,7 @@ def download_dataframe(df):
 
 # Main function to run the Streamlit app
 def main():
+    setup_streamlit()
     # Text area for URLs
     urls_text = st.text_area("Enter URLs (separated by commas or line breaks):")
     # Text area for keywords
@@ -80,7 +81,7 @@ def main():
 
     # Display the DataFrame
     show_dataframe(df)
-
+    
     # Handle API keys and model selection
     client = handle_api_keys()
 
