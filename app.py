@@ -158,35 +158,7 @@ def analyze_urls(dataframe, client, language):
 
     return pd.DataFrame(results)
 
-# Function to analyze URLs and generate new content
-def analyze_urls(dataframe, client, model, language):
-    results = []
 
-    # Iterate over each row in the DataFrame
-    for _, row in dataframe.iterrows():
-        url = row['url']
-        keyword = row['keyword']
-        title = row['title']
-        meta_description = row['meta_desc']
-        h1 = row['h1']
-
-        # Combine the extracted info and keyword into a single text block
-        combined_text = f"Title: {title}\nMeta Description: {meta_description}\nH1: {h1}\nKeyword: {keyword}"
-
-        # Get new title, meta description, and h1 using the GPT-4 API call
-        generated_response = generate_content(client, model, combined_text, language)
-
-        new_title, new_meta_description, new_h1 = parse_gpt_response(generated_response)
-
-        # Append the generated content to the results list
-        results.append({
-            "url": url,
-            "new title": new_title,
-            "new meta_desc": new_meta_description,
-            "new h1": new_h1
-        })
-
-    return pd.DataFrame(results)
 
 # Main function to run the Streamlit app
 def main():
