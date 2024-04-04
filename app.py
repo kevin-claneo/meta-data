@@ -224,28 +224,30 @@ def main():
     # Combine the DataFrames
     df = pd.merge(urls_df, keywords_df, left_index=True, right_index=True)
 
-    if df not None:
-    # Display the DataFrame
-    show_dataframe(df)
+    if not df.empty:
+        # Display the DataFrame
+        show_dataframe(df)
 
-    # Confirm the preview
-    if st.button("Confirm Preview"):
-        # Handle API keys and model selection
-        client = handle_api_keys()
+        # Confirm the preview
+        if st.button("Confirm Preview"):
+            # Handle API keys and model selection
+            client, model = handle_api_keys()
 
-        # Choose a language for the Meta Data
-        language = st.selectbox("Choose a language for the Meta Data:", LANGUAGES)
+            # Choose a language for the Meta Data
+            language = st.selectbox("Choose a language for the Meta Data:", LANGUAGES)
 
-        # Generate Meta Data
-        if st.button("Generate Meta Data"):
-            # Analyze URLs and generate new content
-            new_df = analyze_urls(df, client, language)
+            # Generate Meta Data
+            if st.button("Generate Meta Data"):
+                # Analyze URLs and generate new content
+                new_df = analyze_urls(df, client, model, language)
 
-            # Display the new DataFrame
-            show_dataframe(new_df)
+                # Display the new DataFrame
+                show_dataframe(new_df)
 
-            # Download DataFrame as CSV
-            download_dataframe(new_df)
+                # Download DataFrame as CSV
+                download_dataframe(new_df)
+        else:
+            st.write("It looks like your text_input is empty, please fill in both fidlds")
 
 # Run the main function
 if __name__ == "__main__":
