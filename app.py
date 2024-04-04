@@ -33,7 +33,7 @@ def setup_streamlit():
     Sets the page layout, title, and markdown content with links and app description.
     """
     st.set_page_config(
-        page_title="Google Sheets Access with Streamlit",
+        page_title="Optimize Your Meta Data with AI",
         page_icon="🤖",
         layout="wide",
         initial_sidebar_state="expanded",
