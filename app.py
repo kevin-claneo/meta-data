@@ -178,9 +178,9 @@ def main():
     init_session_state() # Initialize session state
 
     # Text area for URLs
-    urls_text = st.text_area("Enter URLs (separated by commas or line breaks):")
+    urls_text = st.text_area("Enter URLs 🔗 (separated by commas or line breaks):")
     # Text area for keywords
-    keywords_text = st.text_area("Enter Keywords (separated by commas or line breaks):")
+    keywords_text = st.text_area("Enter Keywords 🔑 (separated by commas or line breaks):")
 
     # Convert text areas to DataFrames
     urls_df = text_to_df(urls_text, 'url')
@@ -203,7 +203,7 @@ def main():
             client, model = handle_api_keys()
 
             # Choose a language for the Meta Data
-            language = st.selectbox("Choose a language for the Meta Data:", LANGUAGES)
+            language = st.selectbox("Choose a language :united_nations: for the Meta Data:", LANGUAGES)
 
             # Generate Meta Data
             if st.button("Generate Meta Data"):
