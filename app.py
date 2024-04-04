@@ -117,6 +117,10 @@ def clean_up_string(s):
     return ' '.join(elements) # Joining the elements back into a single string
 
 def analyze_urls(dataframe, client, model, language):
+    # Initialize a progress bar
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+
     # Crawl URLs
     open('crawl_file.jl', 'w').close()
     adv.crawl(dataframe['url'], 'crawl_file.jl', follow_links=False)
@@ -130,9 +134,10 @@ def analyze_urls(dataframe, client, model, language):
     df = pd.merge(dataframe, crawl_df[["url", "title", "meta_desc", "h1"]], on=["url"])
 
     results = []
+    total_rows = len(df)
 
     # Iterate over each row in the DataFrame
-    for _, row in df.iterrows():
+    for index, row in df.iterrows():
         url = row['url']
         keyword = row['keyword']
         title = row['title']
@@ -142,11 +147,11 @@ def analyze_urls(dataframe, client, model, language):
         # Combine the extracted info and keyword into a single text block
         combined_text = f"Title: {title}\nMeta Description: {meta_description}\nH1: {h1}\nKeyword: {keyword}"
 
-        # Get new title, meta description, and h1 using the GPT-4 API call
+        # Get new title, meta description, and h1 using the GPT API call
         generated_response = generate_content(client, model, combined_text, language)
 
-        # Parse the GPT-4 response
-        new_title, new_meta_description, new_h1 = parse_gpt4_response(generated_response)
+        # Parse the GPT response
+        new_title, new_meta_description, new_h1 = parse_gpt_response(generated_response)
 
         # Append the generated content to the results list
         results.append({
@@ -155,6 +160,11 @@ def analyze_urls(dataframe, client, model, language):
             "new meta_desc": new_meta_description,
             "new h1": new_h1
         })
+
+        # Update the progress bar
+        progress = (index + 1) / total_rows
+        progress_bar.progress(progress)
+        status_text.text(f"Processing row {index + 1} of {total_rows}")
 
     return pd.DataFrame(results)
 
