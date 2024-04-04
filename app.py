@@ -180,11 +180,11 @@ def main():
     # Text area for keywords
     keywords_text = st.text_area("Enter Keywords 🔑 (separated by commas or line breaks):")
 
-    # Convert text areas to DataFrames
-    urls_df = text_to_df(urls_text, 'url')
-    keywords_df = text_to_df(keywords_text, 'keyword')
+    # Convert text areas to DataFrames and reset indices
+    urls_df = text_to_df(urls_text, 'url').reset_index(drop=True)
+    keywords_df = text_to_df(keywords_text, 'keyword').reset_index(drop=True)
     
-    # Combine the DataFrames
+    # Merge the DataFrames on the reset indices
     df = pd.merge(urls_df, keywords_df, left_index=True, right_index=True)
 
     if not df.empty:
