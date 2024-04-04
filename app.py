@@ -75,10 +75,10 @@ def setup_streamlit():
     st.divider()
 
 # Function to convert text area input into a DataFrame
-def text_to_df(text):
+def text_to_df(text, column_name):
     items = text.split(',') + text.split('\n')
     items = [item.strip() for item in items if item.strip()]
-    df = pd.DataFrame(items, columns=['url'])
+    df = pd.DataFrame(items, columns=[column_name])
     return df
 
 # Function to show the DataFrame in an expandable section
@@ -218,8 +218,8 @@ def main():
     keywords_text = st.text_area("Enter Keywords (separated by commas or line breaks):")
 
     # Convert text areas to DataFrames
-    urls_df = text_to_df(urls_text)
-    keywords_df = text_to_df(keywords_text)
+    urls_df = text_to_df(urls_text, 'url')
+    keywords_df = text_to_df(keywords_text, 'keyword')
     
     # Combine the DataFrames
     df = pd.merge(urls_df, keywords_df, left_index=True, right_index=True)
