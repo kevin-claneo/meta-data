@@ -92,8 +92,8 @@ def download_dataframe(df):
 
 # Function to generate content
 def generate_content(client, model, text, language, meta_type):
-    prompt = f"You are a specialized assistant trained to craft the optimal {meta_type} for SEO in {language}. Your task is to produce content that is human-like, unique, and effective for boosting Click-Through Rate (CTR), avoid using standard phrases and come up with a phrase that is more unique and therefore more appealing. You will be given a combination of Title, Meta Description, H1 and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information. Respond in the exact format: 'your {meta_type} here' avoid using quotation marks or squared brackets in your response. Your response should be in {language}. Adapt your language style to match the tone of the current Title, Meta Description and H1. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as natural as possible. Make sure to generate a text that fits fully in the output."
-    max_tokens = MAX_TOKENS_TITLE if meta_type == 'title' else (MAX_TOKENS_META_DESCRIPTION if meta_type == 'meta description' else MAX_TOKENS_H1)
+    prompt = f"You are a specialized assistant trained to craft the optimal {meta_type} for SEO in {language}. Your task is to produce content that is human-like, unique, and effective for boosting Click-Through Rate (CTR), avoid using standard phrases and come up with a phrase that is more unique and therefore more appealing. You will be given a combination of Title Tag, Meta Description, H1 and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information. Respond in the exact format: 'your {meta_type} here' avoid using quotation marks or squared brackets in your response. Your response should be in German. Adapt your language style to match the tone of the text input. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as natural as possible. Your output is limited to {max_tokens} tokens, create the text fully within this limit."
+    max_tokens = MAX_TOKENS_TITLE if meta_type == 'title tag' else (MAX_TOKENS_META_DESCRIPTION if meta_type == 'meta description' else MAX_TOKENS_H1)
 
     if model in ANTHROPIC_MODELS:
         response = client.messages.create(
@@ -226,7 +226,7 @@ def main():
             language = st.selectbox("Choose a language🌐 for the Meta Data:", LANGUAGES)
 
             # Select which meta data to change
-            meta_data_to_change = st.multiselect("Select which meta data you want to change:", options=['Title', 'Meta Description', 'H1'], default=['Title', 'Meta Description', 'H1'])
+            meta_data_to_change = st.multiselect("Select which meta data you want to change:", options=['Title Tag', 'Meta Description', 'H1'], default=['Title Tag', 'Meta Description', 'H1'])
 
             # Generate Meta Data
             if st.button("Generate Meta Data"):
