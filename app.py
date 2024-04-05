@@ -76,11 +76,11 @@ def handle_api_keys():
     
     - **{GROQ_MODELS}**: These models are free to use and offer fast response times. However, they may not always provide the highest quality of text. The first model in this list, {GROQ_MODELS[0]}, is generally considered the best within the GROQ models due to its balance of speed and quality.
     
-    - **{ANTHROPIC_MODELS}**: Known for their superior text quality, these models require an API key, which can be obtained from [Anthropic's settings page](https://console.anthropic.com/settings/keys). Please note that while they offer the best text quality, they may also be more costly. Among the Anthropic models, {ANTHROPIC_MODELS[0]} is considered the best, offering the highest quality text, but the most costly.
+    - **{ANTHROPIC_MODELS}**: Known for their superior text quality, these models require an API key, which can be obtained from [Anthropic's settings page](https://console.anthropic.com/settings/keys). The first model in this list, {ANTHROPIC_MODELS[0]} is considered the best, offering the highest quality text, but the most costly.
     
-    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). The first model in this list, {OPENAI_MODELS[0]}, is regarded as the best within the OpenAI models, but the most costly.
+    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). The first model in this list, {OPENAI_MODELS[0]} is considered the best, offering the highest quality text, but the most costly.
     
-    It's important to note that the quality and cost-effectiveness of models can vary. Always consider your specific needs and budget when selecting a model.
+    It's important to note that the quality and cost-effectiveness of models can vary. ***Always consider your specific needs and budget when selecting a model.***
     
     For the most current information on which model is performing best overall, you can visit the [Chatbot Arena Leaderboard](https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard) on Hugging Face. This leaderboard provides insights into the performance of various models in real-world scenarios, helping you make an informed decision.
     """)
