@@ -40,6 +40,7 @@ def setup_streamlit():
     st.set_page_config(
         page_title="Meta Data Optimizer",
         page_icon="🤖",
+        layout="wide",
         menu_items={
             'Get Help': 'https://www.linkedin.com/in/kirchhoff-kevin/',
             'About': "This is an app for accessing Google Sheets data."
