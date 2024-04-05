@@ -15,7 +15,6 @@ OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
 MODELS = GROQ_MODELS + ANTHROPIC_MODELS + OPENAI_MODELS
 LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
 
-
 # -------------
 # Streamlit App Configuration
 # -------------
@@ -89,16 +88,32 @@ def download_dataframe(df):
 
 # Function to generate content
 def generate_content(client, model, text, language):
-    while True:
-        try:
-            response = client.chat.completions.create(model=model, messages=[
-                {"role": "system", "content": f"You are a specialized assistant trained to craft the optimal title, meta description, and h1 heading for SEO in {language}. Your task is to produce content that is human-like, unique, and effective for boosting Click-Through Rate (CTR). You will be given the current title, meta description, h1 heading, and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information. Respond in the exact format: 'Title: [your title here]\\nMeta Description: [your meta description here]\\nH1: [your h1 heading here]' without any quotation marks around the content. Your response should be in {language}. Adapt your language style to match the tone of the current meta data. Do not include any notes, explanations, or additional information. Focus solely on generating the title, meta description, and h1 heading."},
+    # Define the prompt for Groq and OpenAI models
+    prompt = f"You are a specialized assistant trained to craft the optimal title, meta description, and h1 heading for SEO in {language}. Your task is to produce content that is human-like, unique, and effective for boosting Click-Through Rate (CTR). You will be given the current title, meta description, h1 heading, and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information. Respond in the exact format: 'Title: [your title here]\\nMeta Description: [your meta description here]\\nH1: [your h1 heading here]' without any quotation marks around the content. Your response should be in {language}. Adapt your language style to match the tone of the current meta data. Do not include any notes, explanations, or additional information. Focus solely on generating the title, meta description, and h1 heading."
+
+    # Check if the model is from Anthropic
+    if model in ANTHROPIC_MODELS:
+        # Use the Anthropic API syntax
+        response = client.messages.create(
+            model=model,
+            system=prompt,
+            messages=[
                 {"role": "user", "content": text}
-            ])
-            return response.choices[0].message.content
-        except Exception as e:
-            print(f"Error: {e}. Retrying in 7 seconds...")
-            time.sleep(7)
+            ]
+        )
+        return response.content
+    else:
+        # Use the Groq and OpenAI API syntax
+        while True:
+            try:
+                response = client.chat.completions.create(model=model, messages=[
+                    {"role": "system", "content": prompt},
+                    {"role": "user", "content": text}
+                ])
+                return response.choices[0].message.content
+            except Exception as e:
+                print(f"Error: {e}. Retrying in 7 seconds...")
+                time.sleep(7)
 
 def parse_gpt_response(response_str):
     pattern = r"Title: (\"?)(?P<title>[^\"]+)(\"?)\nMeta Description: (\"?)(?P<meta_description>[^\"]+)(\"?)\nH1: (\"?)(?P<h1>[^\"]+)(\"?)"
