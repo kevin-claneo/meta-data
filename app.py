@@ -76,9 +76,9 @@ def handle_api_keys():
     
     - **{GROQ_MODELS}**: These models are free to use and offer fast response times. However, they may not always provide the highest quality of text. The first model in this list, {GROQ_MODELS[0]}, is generally considered the best within the GROQ models due to its balance of speed and quality.
     
-    - **{ANTHROPIC_MODELS}**: Known for their superior text quality, these models require an API key, which can be obtained from [Anthropic's settings page](https://console.anthropic.com/settings/keys). Please note that while they offer the best text quality, they may also be more costly. Among the Anthropic models, {ANTHROPIC_MODELS[0]} is considered the best, offering the highest quality text.
+    - **{ANTHROPIC_MODELS}**: Known for their superior text quality, these models require an API key, which can be obtained from [Anthropic's settings page](https://console.anthropic.com/settings/keys). Please note that while they offer the best text quality, they may also be more costly. Among the Anthropic models, {ANTHROPIC_MODELS[0]} is considered the best, offering the highest quality text, but the most costly.
     
-    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). They are renowned for their capabilities but may come with usage fees. The first model in this list, {OPENAI_MODELS[0]}, is often regarded as the best within the OpenAI models, known for its advanced capabilities and reputation in the AI community.
+    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). The first model in this list, {OPENAI_MODELS[0]}, is regarded as the best within the OpenAI models, but the most costly.
     
     It's important to note that the quality and cost-effectiveness of models can vary. Always consider your specific needs and budget when selecting a model.
     
