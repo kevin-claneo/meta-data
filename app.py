@@ -158,8 +158,8 @@ def analyze_urls(dataframe, client, model, language):
         # Append the generated content to the results list
         results.append({
             "url": url,
-            "new title": new_title
-            "new meta_desc": new_meta_description
+            "new title": new_title,
+            "new meta_desc": new_meta_description,
             "new h1": new_h1
         })
 
