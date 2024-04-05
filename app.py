@@ -14,6 +14,9 @@ GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
 OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
 MODELS = GROQ_MODELS + ANTHROPIC_MODELS + OPENAI_MODELS
 LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
+MAX_TOKENS_TITLE = 16
+MAX_TOKENS_META_DESCRIPTION = 44
+MAX_TOKENS_H1 = 17
 
 # -------------
 # Streamlit App Configuration
