@@ -114,7 +114,15 @@ def generate_content(client, model, text, language, meta_type):
                 print(f"Error: {e}. Retrying in 7 seconds...")
                 time.sleep(7)
 
+def clean_up_string(s):
+    if not isinstance(s, str):
+        return s # Return the original value if it's not a string
 
+    # Remove the '@@' separators
+    cleaned = s.replace('@@', '\n')
+    # Split by newline to get individual elements
+    elements = [elem.strip() for elem in cleaned.split('\n') if elem.strip()]
+    return ' '.join(elements) # Joining the elements back into a single string
 
 def analyze_urls(dataframe, client, model, language):
     # Initialize a progress bar
