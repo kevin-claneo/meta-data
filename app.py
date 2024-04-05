@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from anthropic import Anthropic
 from openai import OpenAI
 from groq import Groq
 import re
@@ -8,9 +9,10 @@ import advertools as adv
 
 
 # Constants
+ANTHROPIC_MODELS = ['claude-3-opus-20240229', 'claude-3-sonnet-20240229','claude-3-haiku-20240307']
 GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
 OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
-MODELS = GROQ_MODELS + OPENAI_MODELS
+MODELS = GROQ_MODELS + ANTHROPIC_MODELS + OPENAI_MODELS
 LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
 
 
@@ -69,6 +71,8 @@ def handle_api_keys():
     model = st.selectbox("Choose a model:", MODELS)
     if model in GROQ_MODELS:
         client = Groq(api_key=st.secrets["groq"]["api_key"])
+    elif model in ANTHROPIC_MODELS:
+        client = Anthropic(api_key=st.text_input('Please enter your Anthropic API Key:', "https://console.anthropic.com/"))
     elif model in OPENAI_MODELS:
         client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key:', "https://platform.openai.com/api-keys"))
     return client, model
