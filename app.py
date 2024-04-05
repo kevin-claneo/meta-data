@@ -104,7 +104,7 @@ def generate_content(client, model, text, language, meta_type):
                 {"role": "user", "content": text}
             ]
         )
-        return response.content
+        return response.content[0].text
     else:
         while True:
             try:
