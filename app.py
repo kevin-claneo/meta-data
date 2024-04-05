@@ -254,7 +254,7 @@ def main():
         if st.session_state.confirmed_preview:
             # Handle API keys and model selection
             client, model = handle_api_keys()
-            st.write('If you are unsure which model you should choose, hover over the ❔ to get some help.')
+            st.write('If you are unsure which model you should choose, hover over the ❔ on the right to get some help.')
             # Choose a language for the Meta Data
             language = st.selectbox("Choose a language🌐 for the Meta Data:", LANGUAGES)
 
