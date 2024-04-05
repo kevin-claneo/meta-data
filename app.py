@@ -107,7 +107,7 @@ def generate_content(client, model, text, language, meta_type):
     
     Adapt your language style to match the tone of the text input. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as naturally as possible, especially in the title tag and H1.
     
-    Your output is limited to {max_tokens} tokens. Create the text fully within this limit.
+    Your output is limited to {max_tokens} tokens. Finish the output fully within this limit.
     
     For product pages, include important product information such as the product name, model number, price, features, benefits, and availability to make your meta description and H1 tag more relevant and appealing to potential customers.
     """
