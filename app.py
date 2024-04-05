@@ -98,7 +98,7 @@ def generate_content(client, model, text, language, meta_type):
     - Human-like
     - Unique
     - Effective for boosting user-interaction
-    - Appealing, using varying CTAs instead of overusing 'discover' and its translations
+    - Appealing, using varying CTAs instead of overusing 'discover', 'explore' and its translations
     
     You will be given a combination of Title Tag, Meta Description, H1, and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information.
     
