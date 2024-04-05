@@ -87,52 +87,34 @@ def download_dataframe(df):
     )
 
 # Function to generate content
-def generate_content(client, model, text, language):
-    # Define the prompt for Groq and OpenAI models
-    prompt = f"You are a specialized assistant trained to craft the optimal title, meta description, and h1 heading for SEO in {language}. Your task is to produce content that is human-like, unique, and effective for boosting Click-Through Rate (CTR). You will be given the current title, meta description, h1 heading, and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information. Respond in the exact format: 'Title: [your title here]\\nMeta Description: [your meta description here]\\nH1: [your h1 heading here]' without any quotation marks around the content. Your response should be in {language}. Adapt your language style to match the tone of the current meta data. Do not include any notes, explanations, or additional information. Focus solely on generating the title, meta description, and h1 heading."
+def generate_content(client, model, text, language, meta_type):
+    prompt = f"You are a specialized assistant trained to craft the optimal {meta_type} for SEO in {language}. Your task is to produce content that is human-like, unique, and effective for boosting Click-Through Rate (CTR). You will be given a combination of Title, Meta Description, H1 and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information. Respond in the exact format: '{meta_type.upper()}: [your {meta_type} here]' without any quotation marks around the content. Your response should be in {language}. Adapt your language style to match the tone of the current Title, Meta Description and H1. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as natural as possible."
 
-    # Check if the model is from Anthropic
+    max_tokens = MAX_TOKENS_TITLE if meta_type == 'title' else (MAX_TOKENS_META_DESCRIPTION if meta_type == 'meta description' else MAX_TOKENS_H1)
+
     if model in ANTHROPIC_MODELS:
-        # Use the Anthropic API syntax
         response = client.messages.create(
             model=model,
             system=prompt,
+            max_tokens=max_tokens,
             messages=[
                 {"role": "user", "content": text}
             ]
         )
         return response.content
     else:
-        # Use the Groq and OpenAI API syntax
         while True:
             try:
                 response = client.chat.completions.create(model=model, messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": text}
-                ])
+                ], max_tokens=max_tokens)
                 return response.choices[0].message.content
             except Exception as e:
                 print(f"Error: {e}. Retrying in 7 seconds...")
                 time.sleep(7)
 
-def parse_gpt_response(response_str):
-    pattern = r"Title: (\"?)(?P<title>[^\"]+)(\"?)\nMeta Description: (\"?)(?P<meta_description>[^\"]+)(\"?)\nH1: (\"?)(?P<h1>[^\"]+)(\"?)"
-    match = re.search(pattern, response_str)
 
-    if match:
-        return match.group('title'), match.group('meta_description'), match.group('h1')
-    else:
-        return None, None, None
-# Function to clean up strings
-def clean_up_string(s):
-    if not isinstance(s, str):
-        return s # Return the original value if it's not a string
-
-    # Remove the '@@' separators
-    cleaned = s.replace('@@', '\n')
-    # Split by newline to get individual elements
-    elements = [elem.strip() for elem in cleaned.split('\n') if elem.strip()]
-    return ' '.join(elements) # Joining the elements back into a single string
 
 def analyze_urls(dataframe, client, model, language):
     # Initialize a progress bar
@@ -165,17 +147,19 @@ def analyze_urls(dataframe, client, model, language):
         # Combine the extracted info and keyword into a single text block
         combined_text = f"Title: {title}\nMeta Description: {meta_description}\nH1: {h1}\nKeyword: {keyword}"
 
-        # Get new title, meta description, and h1 using the GPT API call
-        generated_response = generate_content(client, model, combined_text, language)
-
-        # Parse the GPT response
-        new_title, new_meta_description, new_h1 = parse_gpt_response(generated_response)
+        new_title = new_meta_description = new_h1 = None
+        if 'Title' in meta_data_to_change:
+            new_title = generate_content(client, model, combined_text, language, 'title')
+        if 'Meta Description' in meta_data_to_change:
+            new_meta_description = generate_content(client, model, combined_text, language, 'meta description')
+        if 'H1' in meta_data_to_change:
+            new_h1 = generate_content(client, model, combined_text, language, 'h1')
 
         # Append the generated content to the results list
         results.append({
             "url": url,
-            "new title": new_title,
-            "new meta_desc": new_meta_description,
+            "new title": new_title
+            "new meta_desc": new_meta_description
             "new h1": new_h1
         })
 
@@ -185,7 +169,6 @@ def analyze_urls(dataframe, client, model, language):
         status_text.text(f"Processing row {index + 1} of {total_rows}")
 
     return pd.DataFrame(results)
-
 
 
 # Main function to run the Streamlit app
@@ -226,8 +209,12 @@ def main():
             # Choose a language for the Meta Data
             language = st.selectbox("Choose a language🌐 for the Meta Data:", LANGUAGES)
 
+            # Select which meta data to change
+            meta_data_to_change = st.multiselect("Select which meta data you want to change:", options=['Title', 'Meta Description', 'H1'], default=['Title', 'Meta Description', 'H1'])
+
             # Generate Meta Data
             if st.button("Generate Meta Data"):
+                     
                 # Analyze URLs and generate new content
                 new_df = analyze_urls(df, client, model, language)
 
@@ -236,9 +223,10 @@ def main():
 
                 # Download DataFrame as CSV
                 download_dataframe(new_df)
+
     else:
         st.error("It looks like your text input is empty, please fill in both text fields")
-
+        
 # Run the main function
 if __name__ == "__main__":
     main()
