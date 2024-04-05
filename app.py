@@ -75,9 +75,9 @@ def handle_api_keys():
     if model in GROQ_MODELS:
         client = Groq(api_key=st.secrets["groq"]["api_key"])
     elif model in ANTHROPIC_MODELS:
-        client = Anthropic(api_key=st.text_input('Please enter your Anthropic API Key:', "https://console.anthropic.com/"))
+        client = Anthropic(api_key=st.text_input('Please enter your Anthropic API Key:', "https://console.anthropic.com/settings/keys", type="password"))
     elif model in OPENAI_MODELS:
-        client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key:', "https://platform.openai.com/api-keys"))
+        client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key:', "https://platform.openai.com/api-keys", type="password"))
     return client, model
 
 # Function to download the DataFrame as a CSV
