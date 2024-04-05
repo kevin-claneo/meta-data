@@ -96,9 +96,10 @@ def generate_content(client, model, text, language, meta_type):
     prompt = f"""
     You are a specialized assistant trained to craft the optimal {meta_type} for SEO in {language}. Your task is to produce content that is:
     - Human-like
-    - Unique, ensuring each title tag, meta description, and H1 are distinct and informative
+    - Unique, ensuring each title tag, meta description, and H1 are distinct, informative, concise and keyword-optimized
     - Effective for boosting user-interaction, with a focus on capturing users' interest
     - Appealing, using varying CTAs and avoiding overuse of generic phrases
+    - Avoid repetitive or boilerplate titles and ensure the most important words are front-loaded
     
     You will be given a combination of Title Tag, Meta Description, H1, and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information.
     
@@ -107,12 +108,6 @@ def generate_content(client, model, text, language, meta_type):
     Adapt your language style to match the tone of the text input. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as naturally as possible, especially in the title tag and H1.
     
     Your output is limited to {max_tokens} tokens. Create the text fully within this limit.
-    
-    Remember, your title tag should be unique, concise, and keyword-optimized, aiming for a length between 50 and 60 characters. Avoid repetitive or boilerplate titles and ensure the most important words are front-loaded. Your title tag should also be similar to your H1 tag to provide clarity and relevance to both users and search engines.
-    
-    Your meta description should be unique, concise, and keyword-optimized, aiming for a length between 105 and 155 characters. Avoid repetitive or boilerplate descriptions and ensure the most important words are front-loaded. Your meta description should also be similar to your H1 tag to provide clarity and relevance to both users and search engines.
-    
-    Your H1 tag should be descriptive, concise, and match the content of the page. It should be the most prominent heading on the page, providing hierarchy and reassuring visitors that you have the information they're looking for. H1 tags improve the user experience (UX) by allowing readers to learn what your page is about at a glance.
     
     For product pages, include important product information such as the product name, model number, price, features, benefits, and availability to make your meta description and H1 tag more relevant and appealing to potential customers.
     """
