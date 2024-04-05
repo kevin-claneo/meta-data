@@ -104,7 +104,7 @@ def generate_content(client, model, text, language, meta_type):
     
     Respond in the exact format: 'your {meta_type} here' without using quotation marks or squared brackets in your response. Your response must be in {language} at all cost.
     
-    Adapt your language style to match the tone of the text input. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as naturally as possible, especially in the title tag and H1.
+    Adapt your tone to match the tone of the text input. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as naturally as possible, especially in the title tag and H1.
     
     Your output is limited to {max_tokens} tokens. Create the text fully within this limit.
     """
