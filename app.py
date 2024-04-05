@@ -74,13 +74,15 @@ def handle_api_keys():
     model = st.selectbox("Choose a model:", MODELS, help=f"""
     Here's a brief overview of the models available for generating content:
     
-    - **{GROQ_MODELS}**: These models are free to use and offer fast response times. However, they may not always provide the highest quality of text. The first model in this list, {GROQ_MODELS[0]}, is generally considered the best within the GROQ models due to its balance of speed and quality.
+    - **{GROQ_MODELS}**: These models are free to use and offer fast response times, making them an excellent choice for users looking for quick results. However, they may not always provide the highest quality of text. Among the GROQ models, **{GROQ_MODELS[0]}** is generally considered the best due to its balance of speed and quality.
     
-    - **{ANTHROPIC_MODELS}**: Known for their superior text quality, these models require an API key, which can be obtained from [Anthropic's platform](https://console.anthropic.com/settings/keys). The first model in this list, {ANTHROPIC_MODELS[0]} is considered the best, offering the highest quality text, but the most costly.
+    - **{ANTHROPIC_MODELS}**: The models from Anthropic are known for their superior text quality. However, they require an API key, which can be obtained from [Anthropic's platform](https://console.anthropic.com/settings/keys). The first model in this list, **{ANTHROPIC_MODELS[0]}**, is considered the best, offering the highest quality text from Anthropic.
     
-    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). The first model in this list, {OPENAI_MODELS[0]} is considered the best, offering the highest quality text, but the most costly.
+    - **{OPENAI_MODELS}**: These are the most well-known models in the industry, renowned for their advanced capabilities. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). The first model in this list, **{OPENAI_MODELS[0]}**, is considered the best, offering the highest quality text from OpenAI. 
     
-    It's important to note that the quality and cost-effectiveness of models can vary. ***Always consider your specific needs and budget when selecting a model.***
+    It's important to note that the quality and cost-effectiveness of models can vary greatly, so choose the model wisely and test before creating loads of meta data. 
+    
+    **Always consider your specific needs and budget when selecting a model. The models are listed in order of quality or performance, based on user feedback and performance metrics, to help you make an informed decision.**
     
     For the most current information on which model is performing best overall, you can visit the [Chatbot Arena Leaderboard](https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard) on Hugging Face. This leaderboard provides insights into the performance of various models in real-world scenarios, helping you make an informed decision.
     """)
