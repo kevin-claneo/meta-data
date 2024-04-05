@@ -78,7 +78,7 @@ def handle_api_keys():
     
     - **{ANTHROPIC_MODELS}**: The models from Anthropic are known for their superior text quality. However, they require an API key, which can be obtained from [Anthropic's platform](https://console.anthropic.com/settings/keys). The first model in this list, **{ANTHROPIC_MODELS[0]}**, is considered the best, offering the highest quality text from Anthropic.
     
-    - **{OPENAI_MODELS}**: These are the most well-known models in the industry, renowned for their advanced capabilities. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). The first model in this list, **{OPENAI_MODELS[0]}**, is considered the best, offering the highest quality text from OpenAI. 
+    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). The first model in this list, **{OPENAI_MODELS[0]}**, is considered the best, offering the highest quality text from OpenAI. 
     
     **It's important to note that the quality and cost-effectiveness of models can vary greatly, so choose the model wisely and test before creating loads of meta data. Always consider your specific needs and budget when selecting a model.**
     
