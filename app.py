@@ -124,7 +124,7 @@ def clean_up_string(s):
     elements = [elem.strip() for elem in cleaned.split('\n') if elem.strip()]
     return ' '.join(elements) # Joining the elements back into a single string
 
-def analyze_urls(dataframe, client, model, language):
+def analyze_urls(dataframe, client, model, language, meta_data_to_change):
     # Initialize a progress bar
     progress_bar = st.progress(0)
     status_text = st.empty()
@@ -224,7 +224,7 @@ def main():
             if st.button("Generate Meta Data"):
                      
                 # Analyze URLs and generate new content
-                new_df = analyze_urls(df, client, model, language)
+                new_df = analyze_urls(df, client, model, language, meta_data_to_change)
 
                 # Display the new DataFrame
                 show_dataframe(new_df)
