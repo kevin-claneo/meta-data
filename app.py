@@ -11,7 +11,7 @@ import advertools as adv
 # Constants
 ANTHROPIC_MODELS = ['claude-3-opus-20240229', 'claude-3-sonnet-20240229','claude-3-haiku-20240307']
 GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
-OPENAI_MODELS = ['gpt-4-turbo-preview', 'gpt-3.5-turbo']
+OPENAI_MODELS = ['gpt-4-1106-preview', 'gpt-3.5-turbo']
 MODELS = GROQ_MODELS + ANTHROPIC_MODELS + OPENAI_MODELS
 LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
 MAX_TOKENS_TITLE = 16
@@ -71,13 +71,25 @@ def show_dataframe(df):
 
 # Function to handle the model selection and API key input
 def handle_api_keys():
-    model = st.selectbox("Choose a model:", MODELS)
+    model = st.selectbox("Choose a model:", MODELS, help=f"""
+    Here's a brief overview of the models available for generating content:
+    
+    - **{GROQ_MODELS}**: These models are free to use and offer fast response times. However, they may not always provide the highest quality of text.
+    
+    - **{ANTHROPIC_MODELS}**: Known for their superior text quality, these models require an API key, which can be obtained from [Anthropic's settings page](https://console.anthropic.com/settings/keys). Please note that while they offer the best text quality, they may also be more costly.
+    
+    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). They are renowned for their capabilities but may come with usage fees.
+    
+    It's important to note that the quality and cost-effectiveness of models can vary. While {ANTHROPIC_MODELS[0]} is considered the best model from Anthropic in terms of text quality, it is also likely to be the most expensive option. Always consider your specific needs and budget when selecting a model.
+    
+    For the most current information on which model is performing best overall, you can visit the [Chatbot Arena Leaderboard](https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard) on Hugging Face. This leaderboard provides insights into the performance of various models in real-world scenarios, helping you make an informed decision.
+    """)
     if model in GROQ_MODELS:
         client = Groq(api_key=st.secrets["groq"]["api_key"])
     elif model in ANTHROPIC_MODELS:
-        client = Anthropic(api_key=st.text_input('Please enter your Anthropic API Key:', "https://console.anthropic.com/settings/keys", type="password"))
+        client = Anthropic(api_key=st.text_input('Please enter your Anthropic API Key:', type="password"))
     elif model in OPENAI_MODELS:
-        client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key:', "https://platform.openai.com/api-keys", type="password"))
+        client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key:', type="password"))
     return client, model
 
 # Function to download the DataFrame as a CSV
@@ -103,7 +115,7 @@ def generate_content(client, model, text, language, meta_type):
     
     You will be given a combination of Title Tag, Meta Description, H1, and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information.
     
-    Respond in the exact format: 'your {meta_type} here' without using quotation marks or squared brackets in your response. Your response must be in {language} at all cost.
+    Respond only with the new {meta_type} without using quotation marks or squared brackets in your response. Your response must be in {language} at all cost.
     
     Adapt your language style to match the tone of the text input. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as naturally as possible, especially in the title tag and H1.
     
