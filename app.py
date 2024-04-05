@@ -144,6 +144,9 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
 
     # Clean up strings in the DataFrame
     columns_to_clean = ['title', 'meta_desc', 'h1', 'h2']
+    for column in columns_to_clean:
+        if column not in crawl_df.columns:
+            crawl_df[column] = None
     crawl_df[columns_to_clean] = crawl_df[columns_to_clean].applymap(clean_up_string)
 
     # Merge the original DataFrame with the crawled data
