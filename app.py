@@ -203,11 +203,11 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
         combined_text = f"Title: {title}\nMeta Description: {meta_description}\nH1: {h1}\nKeyword: {keyword}"
     
         new_title = new_meta_description = new_h1 = None
-        if 'Title Tag' in meta_data_to_change and status != 404:
+        if 'Title Tag' in meta_data_to_change:
             new_title = generate_content(client, model, combined_text, language, 'title')
-        if 'Meta Description' in meta_data_to_change and status != 404:
+        if 'Meta Description' in meta_data_to_change:
             new_meta_description = generate_content(client, model, combined_text, language, 'meta description')
-        if 'H1' in meta_data_to_change and status != 404:
+        if 'H1' in meta_data_to_change:
             new_h1 = generate_content(client, model, combined_text, language, 'h1')
     
         # Append the generated content to the results list
