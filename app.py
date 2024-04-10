@@ -114,7 +114,9 @@ def generate_content(client, model, text, language, meta_type):
     
     You will be given a combination of Title Tag, Meta Description, H1, and target keyword. It's possible that one or more of these inputs might be 'None' or that the page doesn't exist. In such cases, ignore these inputs and create something new based on the available information.
     
-    Respond only with the new {meta_type} in the form $meta_type without using quotation marks, squared brackets or '{meta_type}:' in your response. Your response must be in {language} at all cost.
+    Respond only with the new {meta_type} in the form $meta_type. Do not use quotation marks, squared brackets or '{meta_type}:' in your response. 
+    
+    Your response must be in {language} at all cost.
     
     Adapt your language style to match the tone of the text input. Do not include any notes, explanations, or additional information. Focus solely on generating the {meta_type} for the target keyword. Try to fit in the keyword as naturally as possible, especially in the title tag and H1.
     
