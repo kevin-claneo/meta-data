@@ -192,7 +192,7 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
         keyword = row['keyword']
         status = row['status']
         
-        if status == 404:
+        if status != 200:
             title = meta_description = h1 = None
         else:
             title = row['title']
