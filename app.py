@@ -189,9 +189,9 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
 
     # Iterate over each row in the DataFrame
     for index, row in df.iterrows():
-       url = row['url']
-       keyword = row['keyword']
-       status = row['status']
+        url = row['url']
+        keyword = row['keyword']
+        status = row['status']
        
        if status == 404:
             title = meta_description = h1 = None
@@ -199,10 +199,9 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
             title = row['title']
             meta_description = row['meta_desc']
             h1 = row['h1']
-        
-        # Combine the extracted info and keyword into a single text block
+           
+       # Combine the extracted info and keyword into a single text block   
         combined_text = f"Title: {title}\nMeta Description: {meta_description}\nH1: {h1}\nKeyword: {keyword}"
-
         new_title = new_meta_description = new_h1 = None
         if 'Title Tag' in meta_data_to_change:
             new_title = generate_content(client, model, combined_text, language, 'title')
