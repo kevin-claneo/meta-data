@@ -180,36 +180,36 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
         if column not in crawl_df.columns:
             crawl_df[column] = None
     crawl_df[columns_to_clean] = crawl_df[columns_to_clean].applymap(clean_up_string)
-
     # Merge the original DataFrame with the crawled data
     df = pd.merge(dataframe, crawl_df[["url", "title", "meta_desc", "h1", "status"]], on=["url"])
-
+    
     results = []
     total_rows = len(df)
-
+    
     # Iterate over each row in the DataFrame
     for index, row in df.iterrows():
         url = row['url']
         keyword = row['keyword']
         status = row['status']
-       
-       if status == 404:
+        
+        if status == 404:
             title = meta_description = h1 = None
-       else:
+        else:
             title = row['title']
             meta_description = row['meta_desc']
             h1 = row['h1']
-           
-       # Combine the extracted info and keyword into a single text block   
+    
+        # Combine the extracted info and keyword into a single text block
         combined_text = f"Title: {title}\nMeta Description: {meta_description}\nH1: {h1}\nKeyword: {keyword}"
+    
         new_title = new_meta_description = new_h1 = None
-        if 'Title Tag' in meta_data_to_change:
+        if 'Title Tag' in meta_data_to_change and status != 404:
             new_title = generate_content(client, model, combined_text, language, 'title')
-        if 'Meta Description' in meta_data_to_change:
+        if 'Meta Description' in meta_data_to_change and status != 404:
             new_meta_description = generate_content(client, model, combined_text, language, 'meta description')
-        if 'H1' in meta_data_to_change:
+        if 'H1' in meta_data_to_change and status != 404:
             new_h1 = generate_content(client, model, combined_text, language, 'h1')
-
+    
         # Append the generated content to the results list
         results.append({
             "url": url,
@@ -217,11 +217,12 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
             "new meta_desc": new_meta_description,
             "new h1": new_h1
         })
-
+    
         # Update the progress bar
         progress = (index + 1) / total_rows
         progress_bar.progress(progress)
         status_text.text(f"Processing row {index + 1} of {total_rows}")
+
 
     return pd.DataFrame(results)
         
