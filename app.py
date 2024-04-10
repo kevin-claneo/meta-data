@@ -188,7 +188,7 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
     total_rows = len(df)
 
     # Iterate over each row in the DataFrame
-   for index, row in df.iterrows():
+    for index, row in df.iterrows():
        url = row['url']
        keyword = row['keyword']
        status = row['status']
