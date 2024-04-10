@@ -182,19 +182,24 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
     crawl_df[columns_to_clean] = crawl_df[columns_to_clean].applymap(clean_up_string)
 
     # Merge the original DataFrame with the crawled data
-    df = pd.merge(dataframe, crawl_df[["url", "title", "meta_desc", "h1"]], on=["url"])
+    df = pd.merge(dataframe, crawl_df[["url", "title", "meta_desc", "h1", "status"]], on=["url"])
 
     results = []
     total_rows = len(df)
 
     # Iterate over each row in the DataFrame
-    for index, row in df.iterrows():
-        url = row['url']
-        keyword = row['keyword']
+   for index, row in df.iterrows():
+    url = row['url']
+    keyword = row['keyword']
+    status = row['status']
+    
+    if status == 404:
+        title = meta_description = h1 = None
+    else:
         title = row['title']
         meta_description = row['meta_desc']
         h1 = row['h1']
-
+        
         # Combine the extracted info and keyword into a single text block
         combined_text = f"Title: {title}\nMeta Description: {meta_description}\nH1: {h1}\nKeyword: {keyword}"
 
