@@ -225,6 +225,7 @@ def analyze_urls(dataframe, client, model, language, meta_data_to_change):
         status_text.text(f"Processing row {index + 1} of {total_rows}")
 
     return pd.DataFrame(results)
+        
 
 
 # Main function to run the Streamlit app
