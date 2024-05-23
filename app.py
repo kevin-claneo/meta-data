@@ -10,8 +10,8 @@ import advertools as adv
 
 # Constants
 ANTHROPIC_MODELS = ['claude-3-opus-20240229', 'claude-3-sonnet-20240229','claude-3-haiku-20240307']
-GROQ_MODELS = ['mixtral-8x7b-32768', 'llama2-70b-4096']
-OPENAI_MODELS = ['gpt-4-turbo', 'gpt-3.5-turbo']
+GROQ_MODELS = ['llama3-70b-8192','mixtral-8x7b-32768']
+OPENAI_MODELS = ['gpt-4o','gpt-4-turbo', 'gpt-3.5-turbo']
 MODELS = GROQ_MODELS + ANTHROPIC_MODELS + OPENAI_MODELS
 LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
 MAX_TOKENS_TITLE = 16
