@@ -3,6 +3,7 @@ import pandas as pd
 from anthropic import Anthropic
 from openai import OpenAI
 from groq import Groq
+import google.generativeai as genai
 import re
 import time
 import advertools as adv
