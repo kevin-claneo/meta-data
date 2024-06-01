@@ -12,7 +12,8 @@ import advertools as adv
 ANTHROPIC_MODELS = ['claude-3-opus-20240229', 'claude-3-sonnet-20240229','claude-3-haiku-20240307']
 GROQ_MODELS = ['llama3-70b-8192','mixtral-8x7b-32768']
 OPENAI_MODELS = ['gpt-4o','gpt-4-turbo', 'gpt-3.5-turbo']
-MODELS = GROQ_MODELS + ANTHROPIC_MODELS + OPENAI_MODELS
+GOOGLE_MODELS= ['gemini-1.5-pro','gemini-1.5-flash']
+MODELS = GOOGLE_MODELS + ANTHROPIC_MODELS + OPENAI_MODELS +  GROQ_MODELS
 LANGUAGES = ['German', 'English', 'Spanish', 'French', 'Italian', 'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Japanese', 'Korean', 'Vietnamese', 'Indonesian', 'Hindi', 'Bengali', 'Urdu', 'Malay', 'Thai', 'Burmese', 'Cambodian', 'Amharic', 'Swahili', 'Hausa', 'Yoruba', 'Igbo', 'Oromo', 'Tigrinya', 'Afar', 'Somali', 'Ethiopian', 'Tajik', 'Pashto', 'Persian', 'Uzbek', 'Kazakh', 'Kyrgyz', 'Turkmen', 'Azerbaijani', 'Armenian', 'Georgian', 'Moldovan']
 MAX_TOKENS_TITLE = 16
 MAX_TOKENS_META_DESCRIPTION = 44
@@ -71,24 +72,28 @@ def show_dataframe(df):
 # Function to handle the model selection and API key input
 def handle_api_keys():
     model = st.selectbox("Choose a model:", MODELS, help=f"""
-    Here's a brief overview of the models available for generating content:
-    
-    - **{GROQ_MODELS}**: These models are free to use and offer fast response times, making them an excellent choice for users looking for quick results. However, they may not always provide the highest quality of text. Among the GROQ models, the first model in this list: **{GROQ_MODELS[0]}** is generally considered the best due to its balance of speed and quality.
-    
-    - **{ANTHROPIC_MODELS}**: The models from Anthropic are known for their superior text quality. However, they require an API key, which can be obtained from [Anthropic's platform](https://console.anthropic.com/settings/keys). Among the Anthropic models, the first model in this list: **{ANTHROPIC_MODELS[0]}**, is considered the best, offering the highest quality text, but is the most costly.
-    
-    - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). Among the OpenAI models, the first model in this list: **{OPENAI_MODELS[0]}**, is considered the best, offering the highest quality text, but is the most costly.
-    
-    **It's important to note that the quality and cost-effectiveness of models can vary greatly, so choose the model wisely and test before creating loads of meta data. Always consider your specific needs and budget when selecting a model.**
-    
-    For the most current information on which model is performing best overall, you can visit the [Chatbot Arena Leaderboard](https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard) on Hugging Face. This leaderboard provides insights into the performance of various models in real-world scenarios, helping you make an informed decision.
-    """)
+        Here's a brief overview of the models available for generating content:
+        
+        - **{GOOGLE_MODELS}**: The models from Google are known for their high text quality, often preferred over the text quality of OpenAI models. You can obtain an API key from [Google's AI Studio](https://aistudio.google.com/app/u/1/apikey). Among the Google models, the first model in this list: **{GOOGLE_MODELS[0]}**, is considered the best, offering the highest quality text, but it may come at a higher cost.
+        
+        - **{ANTHROPIC_MODELS}**: The models from Anthropic are known for their superior text quality. However, they require an API key, which can be obtained from [Anthropic's platform](https://console.anthropic.com/settings/keys). Among the Anthropic models, the first model in this list: **{ANTHROPIC_MODELS[0]}**, is considered the best, offering the highest quality text, but is the most costly.
+        
+        - **{OPENAI_MODELS}**: These are the most well-known models in the industry. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys). Among the OpenAI models, the first model in this list: **{OPENAI_MODELS[0]}**, is considered the best, offering the highest quality text, but is the most costly.
+        
+        - **{GROQ_MODELS}**: These models are free to use and offer fast response times, making them an excellent choice for users looking for quick results. However, they may not always provide the highest quality of text. Among the GROQ models, the first model in this list: **{GROQ_MODELS[0]}** is generally considered the best due to its balance of speed and quality.
+        **It's important to note that the quality and cost-effectiveness of models can vary greatly, so choose the model wisely and test before creating loads of meta data. Always consider your specific needs and budget when selecting a model.**
+        
+        For the most current information on which model is performing best overall, you can visit the [Chatbot Arena Leaderboard](https://huggingface.co/spaces/lmsys/chatbot-arena-leaderboard) on Hugging Face. This leaderboard provides insights into the performance of various models in real-world scenarios, helping you make an informed decision.
+        """)
     if model in GROQ_MODELS:
         client = Groq(api_key=st.secrets["groq"]["api_key"])
     elif model in ANTHROPIC_MODELS:
         client = Anthropic(api_key=st.text_input('Please enter your Anthropic API Key:', type="password"))
     elif model in OPENAI_MODELS:
         client = OpenAI(api_key=st.text_input('Please enter your OpenAI API Key:', type="password"))
+    elif model in GOOGLE_MODELS:
+        client = genai
+        client.configure(api_key=st.text_input('Please enter your Google AI Studio API Key:', type="password"))
     return client, model
 
 # Function to download the DataFrame as a CSV
@@ -139,6 +144,19 @@ def generate_content(client, model, text, language, meta_type):
         except Exception as e:
                 print(f"Error: {e}. Retrying in 7 seconds...")
                 time.sleep(7)
+    
+    elif model in GOOGLE_MODELS:
+            try:
+                model = client.GenerativeModel(model, system_instruction=prompt, generation_config=genai.GenerationConfig(
+                max_output_tokens=max_tokens,
+                temperature=TEMPERATURE,
+                ))
+                response = model.generate_content(text)
+                return response.text
+            except Exception as e:
+                    print(f"Error: {e}. Retrying in 7 seconds...")
+                    time.sleep(7)
+                
     else:
             try:
                 response = client.chat.completions.create(
