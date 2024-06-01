@@ -1,4 +1,5 @@
 anthropic
 openai
 groq
+google.generativeai
 advertools
