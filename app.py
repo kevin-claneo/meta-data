@@ -50,7 +50,7 @@ def setup_streamlit():
     )
     st.image("https://www.claneo.com/wp-content/uploads/Element-4.svg", width=600, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     st.caption("👋 Developed by [Kevin](https://www.linkedin.com/in/kirchhoff-kevin/)") 
-    st.title("🤖 Optimize Your SEO Meta Data with AI")
+    st.title("🤖 Optimize Your SEO Meta Data with LLMs")
     st.write("This tool creates a new Title tag, Meta Description and H1 based on your existing ones. If you don't have any yet, the tool come up with it's own.")
     st.write("You only have to enter URLs and the matching keywords.")
     st.divider()
